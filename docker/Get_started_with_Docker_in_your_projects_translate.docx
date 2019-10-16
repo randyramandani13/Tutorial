@@ -1,6 +1,6 @@
 Page 6
 Pembukaan
-Selamat datang di ebook "Get started with docker in your projects"
+Selamat datang di ebook "Start your docker project"
 
 saya yakin kamu semangat seperti saya ketika baru memulai dan mengenal dunia docker.
 
@@ -8,4 +8,14 @@ saya menulis buku ini agar mempermudah pelajaran kalian, memberikan step by step
 
 pertama, pada chapter pengenalan, saya akan menjelaskan apa itu docker dan masalah apa yang bisa di atasi jika kita menggunakan docker dalam software development projects.
 
+selanjutnya, dika akan menginstall docker pada mesin komputer kita dan mulai membangun project menggunakan docker, dalam ebook ini juga dilampirkan example code pada setiap chapternya.
 
+kita mulai perjalanan menjalankan aplikasi di dalam docker container, saya akan menunjukan bagaimana cara menjalankan dan memanage aplikasi kita dengan docker.
+
+pada langkah selanjutnya, kita akan lebih mendalami tentang docker image, dan melihat bagaimana kita membuat container dari image, dan kita mempunyai sebuah fokus project, dan saya akan menjelaskan kepada kalian bagaimana mencari dan memilih docker images yang sesuai dengan project yang akan kita jalankan.
+
+selama kita mempelajari docker image, kita juga akan membuat custom docker images menggunakan Dockerfile, mempelajari Dockerfile best practices, dan juga bagaimana workflow ketika membuat sebuah image.
+
+Docker container dan Docker images adalah pondasi untuk membuat Docker-based project, kemudian saya juga membuat chapter yang cukup panjang yaitu "image building exercises" yang dimana kita akan membangun dan menjalankan aplikasi menggunakan shell script, Node.js, Phthon, PHP, C, dan Golang. Semua code example saya sertakan dalam code-examples.
+
+setelah menyelesaikan latihan diatas, anda akan memiliki pengetahuan yang kuat tentang konsep docker containers dan docker images.
