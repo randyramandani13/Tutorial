@@ -18,4 +18,80 @@ selama kita mempelajari docker image, kita juga akan membuat custom docker image
 
 Docker container dan Docker images adalah pondasi untuk membuat Docker-based project, kemudian saya juga membuat chapter yang cukup panjang yaitu "image building exercises" yang dimana kita akan membangun dan menjalankan aplikasi menggunakan shell script, Node.js, Phthon, PHP, C, dan Golang. Semua code example saya sertakan dalam code-examples.
 
+
+Page 7
 setelah menyelesaikan latihan diatas, anda akan memiliki pengetahuan yang kuat tentang konsep docker containers dan docker images.
+
+selanjutnya, kita akan memahami lebih dalam mengenai multi-container application, dimana multiple container bekerja secara bersamaan untuk menjalan suatu aplikasi, saya akan menjelaskan kepada kalian bagaimana cara mendefinisikan, membuild dan menjalankan aplikasi menggunakan docker compose dan juga kita akan belajar mengenai docker network dan docker volume pada chapter ini dengan detail
+
+Chapter dalam buku ini sejauh ini ditargetkan untuk membangun Docker-base projects, kita akan belajar bagaimana memulai dan memanage container, bagaimana cara build docker images untuk project kita, bagai mana build dan manage multi-container applications, dan manage network dan volumes
+
+sekarang kita sudah siap untuk belejar bagaimana cara mengirimkan aplikasi setelah kita membuatnya, kita akan melihat bagaimana cara mengirimkan aplikasi docker images kita ke dalam docker hub, kita akan membuat automatic build workflow menggunakan GitHub, dan kita akan melakukan setup pada docker registry kita, dan juga melihat sebuah sample CI nantinya pada buku ini
+
+selanjutnya kita akan belajar bagaimana cara menjalankan aplikasi kita pada server production, kita akan menjalankan aplikasi kita yang telah kita buat pada chapter pertama, dan pada saat menjalankan, kita coba fokus pada high availability dan scalability pada saat production server.
+
+kita akan belajar bagaimana setup dan manage menggunakan docker swarm cluster, bagaimana deploy applications stack kedalam docker swarm, dan juga bagaimana melakukan scal dan manage service pada sebuah swarm
+
+kita akan memulai cluster deployment dengan menggunakan local machine, pertama dengan satu machine kemudian kita akan membuat dua machine locally dan membuat sebuah swarm cluster, kita akan belajar bagaimana mendeploy dan manage application dalam multiple nodes, dan kita akan belajar bagaimana manage node pada sebuah swarm cluster
+
+
+Page 8
+pada titik ini, kita sudah memiliki pengetahuan yang cukup dengan docker skill, kita harus siap untuk menghadapi tantangan yang lebih kompleks.
+
+untuk membuat kita lebih lancar menggunakan docker, saya juga menyertakan sejumlah example code, dimana kita akan Dockerize sebuah flask application.
+
+kita akan mengambil sebuah flask web aplication yang cukup populer yaitu doilerplate project dari GitHub dan mengembangkan itu sampai kita bisa menggunakan docker untuk build, ship dan run application
+
+dalam latihan ini, kita akan menggunakan docker container untuk generae sebuah application code. kita akan menggunakan environtment variables untuk merubah beberapa aspek pada project yang akan kita buat, seperti real-life projects. kita akan meng automate sebagian dari task project
+
+kita akan melakukan setup development environtment dan automated testing menggunakan travis CI, kita juga menyiapkan production docker configuration untuk project ini
+
+setelah setup project selesai, kita akan mendeploy dan menjalankan web application kita dalam aws menggunakan docker swarm cluster dan juga kubernetes cluster
+
+saya sudah menyiapkan contoh yang berjenjang agar mudah di ikuti.
+
+page 9
+izinkan saya untuk pengenalan singkat secara garis besar tanpa contoh sekarang, dan kita akan melewati semuanya lagi dengan menggukanan contoh di chapter selanjutnya
+
+Apa itu docker?
+docker adalah sebuah tools untuk build, ship, and run aplikasi kita di dalam container
+
+kita biasanya menemui docker ketika kita membutuhkan tools untuk mengirimkan aplikasi kita kedalam sebuah mesin baru, dan kita membutuhkan tools yang dapat dipercaya untuk mengirimkan application technical environtment dengan kode kita
+
+kita juga biasanya bertemu docker saat kita membutuhkan sesuatu yang memudahkan kita untuk menyiapkan technical environtment baru untuk sebuah project
+
+kita biasanya menggukanan beberapa technologies dalam software development projects, kita mempunyain front-end components, back-end server, database dan element yang lainnya seperti cache systems, log management dan lainnya
+
+kita menyiapkan semua komponen menggukanan sebuah bahasa program, platform atau framework, kita bisa contohnya mengembangkan web server components menggunakan python, node.js, php atau tools sejenisnya
+
+selama kita membangun aplikasi dengan tools itu, kita membuat source code itu dengan beberapa requirement, sepanjang jalan itu, solusi yang akan kita buat membutuhkan lebih dari sekedar source kode yang kita buat
+
+kita perlu install package, create configuration files, dan menambahkan executable programs untuk project environtment kita. dependencies itu juga bagian dari aplikasi kita, aplikasi kita tidak akan jalan tanpa itu semua
+
+saya pikir kita semua setuju, solusi ideal itu adalah melakukan encapsulate kode kita dan juga dependenciesnya kedalam satu bundle dan kita dapat menjalankan bundle itu kapanpun dan di mesin manapun dengan cara yang sama
+
+page 10
+docker container dapat melakukan itu semua, docker container meng encapsulate source code kita dan juga dependenciesnya dan menjalankan aplikasi kita, docker container itu portable, kita dapat mengirimkan sebuah docker container ke mesin lain dan menjalan container menggunakan command yang sama dimanapun
+
+di dalam project biasanya, kita membuat container secara terpisah pada setiap komponen, contohnya kita membuat sebuah container untuk menjalankan front-end server dan container lainnya untuk menjalankan back-end 
+
+dalam kasus ini, front-end container kita akan di encapsulate dengan fron-end code dan dependenciesnya dan akan dijalankan sebagai fron-end server process
+
+demikian juga, back-end container kita akan di encapsulate dengan back-end code dan dependenciesnya dan dijalankan sebagai back-end server process
+
+setiap containers akan di isolated dari satu dan lainnya, yang artinya, sekalipun docker container jalan di mesin yang sama, processes, file system, networking resource dan usernya terisolasi
+
+docker container encapsulate kode kita dan dependenciesnya, dependencies itu semua sudah dimasukan kedalam server yang akan kita gukanan untuk membuat aplikasi kita
+
+jika contohnya kita akan membuat sebuah web page nginx, docker container kita akan menjalankan nginx web server installasi, berisikan nginx runtime dan configuration, itu juga sudah sekalian memasukan source code kita pada saat kita menambahkan itu kedalam container
+
+demikian juga node.js container akan memasukan versi tertentu node dan npm, python berisikan beberapa versi python dan juga yang lainnya
+
+container kita definisikan menggunakan docker images, sebuah docker images adalah sebuah file system snapshoot dari files dan directory yang di dalamnya sudah termasuk semua file yang di butuhkan untuk menjalankan sebuah container, kita akan melihat lebih dalam kedalam container dan images pada contoh selanjutnya
+
+kita akan memulai docker container dari sebuah docker images menggukanan docker container run command, saya akan memjelaskan detail pada chapter build
+
+sebuah docker images biasanya sudah termasuk operating system seperti pakage manager, utility program dan system libraries, image juga biasanya sebuah technology componenet seperti node, python, php yang sudah terinstal, image kita juga seharusnya kita sudah masukan project file kita pada saat menambhakan images
+
+
+
