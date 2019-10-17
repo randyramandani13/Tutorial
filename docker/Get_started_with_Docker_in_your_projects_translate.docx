@@ -93,5 +93,24 @@ kita akan memulai docker container dari sebuah docker images menggukanan docker 
 
 sebuah docker images biasanya sudah termasuk operating system seperti pakage manager, utility program dan system libraries, image juga biasanya sebuah technology componenet seperti node, python, php yang sudah terinstal, image kita juga seharusnya kita sudah masukan project file kita pada saat menambhakan images
 
+page 11
+ketika kita bekerja menggunakan docker dalam project kita, kita membuat docker image kita sendiri yang di dalamnya sudah termasuk application code dan semua program dan konfigurasi yang dibutuhkan dalam applications kita
 
+saat image kita telah siap, kita menggunakan docker tools untuk mengirim image kita ke dalam environtment yang lainnya dan menggunakan docker command untuk start up container dan menjalankan aplikasi kita
+
+docker container kita bertindak sebagai environtment yang terisolasi, 
+
+problem apa yang bisa di selesaikan oleh docker?
+
+ini pertanyaan yang paling sering keluar dari setiap orang yang ingin memulai menggunakan docker
+
+docker dapat menyelesaikan masalah mengenai identical environtment untuk setiap application component antara berbagai macam environtment, contohnya development testing staging dan production, dimana setiap aplikasi mempunya environtmentnya sendiri yang terisolasi, dan environtment itu akan sama pada setiap tempat, dan environtment itu dibuat seringan mungkin
+
+menyiapkan environment dan management adalah hal yang membosankan pada setiap project, tarket kita selalu meng isolasi aplikasi dari yang lainnya karna itu yang paling mudah dan murah untuk mengatasi isue reconfigure setting, restart dan upgrade application pada saat terisolasi, dengan demikian kita mengurangi kemungkinan cascading effect ketika kita melakukan perubahan pada satu komponen
+
+jadi docker adalah sebuah container yang berjalan untuk instance application, atau application services
+
+pada saat kita mendockerizing aplikasi kita, kita membuat file system snapshoot dari apikasi kita dan dependeciesnya termasuk system packages, binarie, libraries, configuration files, dan yang lainnya. snapshoot ini di sebut docker images
+
+page 12
 
