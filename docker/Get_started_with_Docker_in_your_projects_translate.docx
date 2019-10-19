@@ -151,5 +151,114 @@ docker container berjalan seperti instance dari sebuah docker images, kita nanti
 dengan beberapa modifikasi dari official wordpress images, kita bisa membuat project wordpress images dengan wordpress plugins dan theme yang sudah ada di dalamnya, kemudian mendistribusikan sebagai satu docker images, dengan code dan environtment didalamnya, kita bisa menjalankan wordress aplication dengan self-contained environtment ( a container ) di semua machine dengan cara yang sama.
 
 page 14
+kita bisa menggunakan sebuah docker image untuk development, kemudian mendistribute image yang sama kepada komputer orang lain kemudian menjalankan container itu tanpa harus peduli dengan konfigurasi lagi di mesin yang lainnya
+
+docker images itu ringan, portable, reproduce-able dan declarative
+
+project teams biasanya menegaskan 2 benefit utama jika menggunakan docker
+1. docker solve masalah "it worked on my machine" untuk alasan itu kita bisa membuat aplikasi kita menggunakan docker image yang sama pada developer laptop dan menggunakan image yang sama pada development dan test server, kemudian juga di production, kita akan menghadapi lebih sedikit bug mengenai environtmental issues dan misconfiguration, itu bisa menyelamatkan kita  dan tim dari waktu dan uang, dan bisa improve untuk quality application
+
+2. kita bisa membangun sebuah end to end "build, ship and run" workflow untuk project kita menggunakan docker, kita bisa menggunakan docker standart configuration file, untuk mendefinisikan image kita, dan kita mendefinisikan bagaimana sebuah container berjalan dari sebuah images, bagaimana container itu seharusnya connect dan cooperate.
+
+bagaimana cara docker bisa bekerja?
+docker dahulu dibuat untuk memanage container pada linux server. dasar use-case nya adalah menjalankan aplikasi dalam isolated container, application dan dependencies yang di bundling bersama dalam linux server.
+
+benefit utama menjalankan aplikasi dalam container pada linux sementara containernya terpisah, mereka share linux kernel dalam mesin yang sama
+
+page 15
+tujuan docker container adalah untuk memaksimalkan resource sharing antar container dan mengisolasi setiap bagian dari aplikasi yang berbeda dan memiliki space sendiri
+
+karna high resource sharing, kita bisa membangun docker container dengan small foot-prints yang mana bisa mendiristribusikan aplikasi lebih mudah dan membuat startup time container lebih cepat
+
+docker container berisikan binary files, libraries, configuraion file dan semua yang di butuhkan aplikasi dalam linux file system hierarchy
+
+page 16
+docker container berisikan aplikasi dan dependenciesnya dalam sebuah layer file system, ini membuat container men share dependencies mereka dengan tepat, jadi kita bisa mendapatkan efisiensi resource kedepannya dalam top sharing host machine kernel dari sharing file system layers
+
+ini adalah langkah yang lebih aju dibandingkan dengan meng isolasi aplikasi menggunakan virtual machine. kita bisa mendapatkan level yang sama untuk mengisolasi aplikasi dengan virtual machine yang lebih mahal karna kita menbutuhkan dedicated guest operating system dan semuanya terisolasi jika menggunakan virtual machine.
+
+page 17
+karna berbagi resource yang lebih tinggi, container lebih portable dan efisien dibanding virtual machine, karna berbagi resource yang lebih tinggi, container lebih memerlukan security dan concern isolasi yang lebih rumit dibanding virtual machine dimana guest operating sistem terisolasi dari hostnya
+
+docker container on non linux systems
+
+kita sudah melihata bagaimana docker container share linux kernel dengan host machine, itu berarti docker container butuh running pada host mesin yang menggunakan linux kernel
+
+berdasarkan apa yang kita pelajari selama ini, kita tau kita bisa melakukan containerize application dalam linux server dan develop container dalam linux machine,
+
+kemudian muncul 2 pertanyaan,
+1. apakah kita bisa membuat docker container pada non linux server?
+
+2. bagaimana kita melakukan develop docker container pada mac dan windows machine?
+
+apakah kita bisa membuat docker container pada non linux server?
+
+docker dimulai untuk container managemenet solution untuk linux system yang di rilis pada 2013, dan di dalam tahun 2016 docker dan microsoft mengumumkan bahwa docker container tersetian untuk windows server dan kita bisa menjalankan langsung diatas windows server kernel.
+
+page 18
+sekarang ada 2 type docker container yang running pada production server:
+- linyx container yang jalan di linux servern
+- windows container yang jalan di windows server 2016 atau windows 10
+
+linux container dan windows container pada dasarnya berbeda, kita menggunakan linyx shell commands binaries dan tool dalam linux container sementara kita menggunakan windows powershell commands windows binaries dan tool dalam windows container, linux container jalan pada linux machine, windows container berjalan pada windows machine, 
+
+dalam buku ini, kita akan membangun linux container dan menjalannya pada linux servers, 
+
+karna mayoritas docker application jalan pada linux containers
+
+bagaimana kita develop docker container dalam mac dan windows machine?
+
+linux container membutuhkan linux kernel untuk jalan, itu artinya kita tidak bisa menjalankan linux container pada windows dan mac langsung, karna operating system itu tidak mempunyai linux kernel,
+
+kita membang bisa develop dan menjalankan docker containers pada keduanya windows dan mac, ketika kita menginstall docker applications pada windows dan mac, installation package berisi sebuah minimal linux virtual machine yang akan dijalankan oleh docker pada backgroun
+
+prosesnya tidak akan terasa pada windows 10 dan newer mac. linux virtual machine berjalan hidden pada backgroun dan fully managed oleh docker
+
+install docker pada mesin kita
+
+docker tersedia pada 2 varian, docker docker community edition dan enterprise edition,kita cukup menggunakan CE untuk permulaan, itu gratis, dan itu juga bisa di gunakan untuk production opertaions.
+
+pages 19
+docker support 64bit OS dan jika kita menggunakan 32bit system, kita tidak bisa menjalankannya
+
+jika kita adalah windows user:
+- yang paling terbaik adalah menggunakan windows 10, kita bisa menggunakan docker for windows, itu berjalan pada windows 10 pro, enterprise dan education.
+- jika kita menggunakan OS lainnya, kita bisa menggunakan docker toolbox
+
+jika kita adalah mac user:
+= yang paling terbaik adalah menggunakan MacOS desktop aplication atau docker for mac, itu bekerja pada OS X El Capitan 10.11 atau OS diatasnya
+- jika menggunakan dibawahnya kita juga perlu menggunakan docker toolbox
+
+jika kita linux user:
+centos,debian,fedora dan ubuntu adalah official supported untul docker CE
+
+page 20
+menggunakan  sebuah virtual machine:
+- jika kita memiliki computer yang cukup, sebaiknya kita menggunakan virtual machine seperti ubuntu yang running di virtualbox, ini membuat agar docker kita bisa terisolasi
+
+install docker for windows
+kita bisa bekerja menggunakna docker pada windows
+
+page 21
+link dibawah ini adalah informasi yang kita butuhkan:
+versi windows 10 64 seharusnya memiliki hyper-v pada system kita, hyper-v adalah sebuah hypervisor, artinya program ini memungkinkan kita menjalankan virtual machine, hyper-v dibutuhkan oleh docker untuk menjalankan small virtual machine linux container di dalam windows
+semua ini terjadi ketika kita melakukan installasi docker windows application dan itu di hidden .
+docker windows install akan meng enable hyper-v otomatis
+
+page 22
+page 23
+page 24
+page 25
+install docker compose
+windows dan mac installer sudah menyertakan docker compose di dalamnya, namun tidak pada linux
+pada linux kita harus menginstallnya secara manual
+
+page 26
+
+
+
+
+
+
 
 
