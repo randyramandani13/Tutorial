@@ -113,4 +113,43 @@ jadi docker adalah sebuah container yang berjalan untuk instance application, at
 pada saat kita mendockerizing aplikasi kita, kita membuat file system snapshoot dari apikasi kita dan dependeciesnya termasuk system packages, binarie, libraries, configuration files, dan yang lainnya. snapshoot ini di sebut docker images
 
 page 12
+kita menggunakan docker command untuk menjalankan container dari docker images, kita bisa memulai beberapa kontainer menggunakan images yang sama, jadi docker images bisa di katakan sebagai file system images dan menjalankan environtments applications
+
+tim infra kita menggunakan itu untuk membuat environtment script yang berbeda untuk stages yang berbeda seperti dev test stagging dan prod, semua environtment itu memang tidak persis sama, tapi mempunyai kemiripan
+
+kita menggunakan untuk local development dan unit testing menggukanan windows machine, dan stages lainnya berjalan dengan unix system
+
+bekerja seperti diatas itu bukannya tidak mungkin, tetapi memakan banyak cost, waktu dan effort untuk memanage setiap environtment dan banyak resiko 
+
+kemudian kita juga mengadopsi virtualisasi, dalam skenario ini, 
+kita membuat virtual machine diatas fisik machine kita, dan mendeploy apikasi kita di dalam virtual machine, dengan cara ini, kita membuat toolset untuk membuat aplikasi kita terpisah pada setiap komponen di vm yang berbeda
+
+virtualisasi bagus untuk meningkan perawatan dan portability untuk software component, tetapi biaya akan membersa karna kita harus menambahkan virtual machine baru pada setiap runtime aplikasi kita
+
+goal kita adalah menyiapkan dedicated resources untuk aplikasi kita, dan juga menjaga agar aplikasi kita tetap terisolasi dan juga meminimalisir rosources tambahan.
+
+docker memberikan kita solusi untuk masalah kita diatas dengan containerization, docker container memberikan sebuah aplikasi yang terisolasi seperti vm tapi kita tidak membutuhkan dedicated vm untuk menjalankan aplikasi kita, sebuah container lebih ringan di bandingkan vm karna container share more system resource dibandingkan vm, kita akan belajar bagaimana container bekerja pada chapter selanjutnya
+
+page 13
+
+seperti yang terlihat diatas, saya mempunyai 2 container yang berjalan, satu adalah wordpress dengan apache web server dan satunya lagi adalah mariadb
+
+jika kita melihat ke bagian port, kita melihat wordpress listen di port 80 yang berarti itu akan active pada localhost server
+
+demikian pula, maria db listen di port 3307, saya bisa konek menggunakan mysql client
+
+wordpress container berjalan menggunakan official wordpress images, yang di dalamnya sudah termasuk snapshoot dari wordpress file structure, ditambah dengan semua file apache web server di tambah dengan dependecy librari dan binarys, itu berisi semua yang dibutuhkan untuk menjalankan wordpress dengan apache, docker, docker engine jelas, meyakinkan apache proses berjalan terisolasi dan proses lainnya di dalam machine saya, dan container mempunyai dedicated resource 
+
+saya menjalankan mariadb container dari official mariadb images, yang mana berisi dari semua yang dibutuhkan untuk menjalankan maria db
+
+saya tidak perlu menginstall dan menjalankan apache atau mysql secara langsung di mesin saya, saya membuat devlopment saya di dalam container, saya sekarang bisa membuat replicate atau membuat ulang dengan environtment yang sama di laptop/server/vm lainnya menggunakan beberapa docker commands
+
+main source untuk docker images adalah docker hub, itu adalah sebuat cloud registry dimana kita bisa mencari, menyimpan dan mengambil berbagai macam docker images
+
+docker container berjalan seperti instance dari sebuah docker images, kita nantinya akan melihat bahwa bermain dengan docker image adalah bagian vital dari development workflow
+
+dengan beberapa modifikasi dari official wordpress images, kita bisa membuat project wordpress images dengan wordpress plugins dan theme yang sudah ada di dalamnya, kemudian mendistribusikan sebagai satu docker images, dengan code dan environtment didalamnya, kita bisa menjalankan wordress aplication dengan self-contained environtment ( a container ) di semua machine dengan cara yang sama.
+
+page 14
+
 
