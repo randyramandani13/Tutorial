@@ -246,14 +246,50 @@ semua ini terjadi ketika kita melakukan installasi docker windows application da
 docker windows install akan meng enable hyper-v otomatis
 
 page 22
+
 page 23
+
 page 24
+
 page 25
 install docker compose
 windows dan mac installer sudah menyertakan docker compose di dalamnya, namun tidak pada linux
 pada linux kita harus menginstallnya secara manual
 
 page 26
+jika kita memiliki computer yang cukup tinggi, kita bisa menggunakan virtual machine untuk belajar, contohnya kita menggunakan virtual box yang gratis atau vmware yang berbayar
+
+kita mungkin bisa mengikuti contoh dari butu ini, tapi mungkin kita akan mengalami kesulitan ketika kita menjalankan beberapa virtual machine untuk membangun sebuah cluster, saya membuat semua example ini dalam vmware ubuntu virtual machine, dan juga menjalankan cluster pada vm
+
+page 27
+
+page 28
+
+page 29
+
+page 30
+Membuat container pertama
+untuk membangun sebuah docker based aplication pada project kita, kita perlu menguasai sebuah gagasan dan basic dari container management dahulu. jadi kita mulai dari sini
+
+mari kita membuat Nginx web server sebagai contoh pertama container kita
+
+pertama bukan docker hub pada browser kita, docker hub adalah sebuah cloud registry dimana kita bisa mencari dan mengambil docker image untuk project kita, 
+
+kita juga bisa mengirim/menyimpan docker images kita dalam docker hub agar semua member team bisa mendownloadnya, 
+
+sangat penting untuk sebuah project kita untuk mencari docker images yang pas untuk project ita. karna itu saya memutuskan untuk membuat chapter tentang navigating and understanding docker repositories on the docker hub nanti
+
+mari fokus pada container pertama kita, pada docker hub mari kita cari nginx
+
+kita akan mendapatkan list image yang tersedia . perlu di catat image pertama kita di note sebagai official image
+
+page 31
+office image artinya di maintained oleh community, dan docker mempunya dedicated team yang bertanggung jawab untuk mereview dan publish official images, tim ini berkolaborasi dengan software maintainers, expert dan docker community.
+
+page 32
+
+
+
 
 
 
