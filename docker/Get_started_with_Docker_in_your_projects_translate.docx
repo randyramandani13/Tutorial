@@ -287,6 +287,88 @@ page 31
 office image artinya di maintained oleh community, dan docker mempunya dedicated team yang bertanggung jawab untuk mereview dan publish official images, tim ini berkolaborasi dengan software maintainers, expert dan docker community.
 
 page 32
+click pada official image nginx, dan buka details page. 
+
+kita bisa melihat box kecil pada tengah kanan yang berkata "copy and paste to pull this image. docker menyediakan CLI docker pull command untuk mendownload images dari docker hub
+
+saat command dijalankan, docker akan mendownload images pada computer local kita, untuk melihat apa yang terjadi, pertama kita coba list image apa saja yang ada pada komputer kita, pada saat pertama kali install, harusnya masih kosong
+
+docker cli menyediakan managemene command yaitu docker images untuk images management. untuk list semua image yang ada di computer kita gunakan docker images pada terminta
+
+sekarang kita coba pull nginx images, menggunakan command docker pull nginx
+setelah kita pull mari kita lihat docker images pada computer kita lagi
+
+page 33
+sekarang kita punya docker images pertama pada docker kita, mari kita jalankan nginx container menggukanan docker container run command
+
+docker container run -p 80:80 -d nginx
+
+pastikan bahwa tidak ada service yang jalan pada port 80 di dalam komputer kita, jika tidak, kita akan mendapatkan error
+
+kemudian buka browser kita dan visit http://localhost. maka welcome page nginx akan muncul
+kita baru saja menjalankan nginx web server di dalam container. kita tidak perlu menginstall nginx pada machine kita dan tidak perlu configure untuk menjalankan itu, itu semua sudah di encapsulated di dalam docker images dan container yang baru saja kita jalankan
+
+mari kita lihat command apa saja yang barusan kita jalankan
+
+page 34
+- docker container run : kita menggunakan ini untuk menjalankan container baru dari sdocker images
+
+-p 80:80 : digunakan untuk map sebuah port dari host machine ke dalam container
+settingan ini membuat nginx tersedia pada http://localhost, yang berarti -p hostport:containerport
+
+kita perlu mengakses web server menggunakan port 80 pada machine kita, jadi kita perlu meletakan 80 pada sisi kiri, nginx listen pada port 80 juga di dalam container, jadi kita meletakan 80 pada sisi kanan
+
+tanpa mapping ini, kita tidak akan bisa mengakses web server kita pada host machine kita
+
+-d : digukanan agar container berjalan pada backgroun mode, -d juga bisa di artikan sebagai detached
+
+-nginx ini adalah nama dari images yang mau kita jalankan
+
+kita mengambil nginx images dari docker hub dan menjalankan sebuah container pada machine kita, kita sudah menjalankan nginx web server di dalam container.
+
+Managing containers
+mari kita lihat, bagai mana kita memanage basic aspect pada container kita, kita akan melakukan beberapa task yaitu :
+- list running containers
+- melihat logs container
+- stop containers
+- list container stopped
+- start and restart containers
+- remove containers
+
+page 35
+- start sebuah container dengan custom name
+- display live container resources usage
+- display running process dari sebuah container
+- run a container in the foreground
+
+List running containers
+kita dapat melihat kita memiliki banyak container yang berjalan pada machine kita 
+gukanan command ini untuk melihat list running containers
+docker container ls
+
+hasilnya akan menampilkan detail dari containers yang running. mari kita lihat outputnya
+- container ID : docker secara random memberikan unique identifier untuk containers kita, kita bisa menggunakan ID ini untuk me refer kepada container itu di dalam docker commands
+- image : nama dari image yang digunakan oleh container kita
+- command : main command yang berjalan pada container
+- created : waktu kapan kita membuat container itu
+- status : status pada container kita, jika UP, itu berarti container sedang running, docker juga memberikan informasi mengenai berapa lama container ini berjalan
+- port : list port yang diunakan pada container. value 0.0.0.0:80->80/tcp berarti kita telah map folder 80 pada kontainer kita pada port 80 di dalam host
+sisi sebelah kiri ada host port, sisi sebelah kanan adalah port pada container
+
+page 36
+0.0.0.0 berarti nginx kita di map untuk semua network interfaces pada host kita
+-names : docker memberikan unique readable name untuk semua containernya, tapi kita bisa memberikan custome name pada docker run command, 
+
+melihat container logs
+saat kita menjalankan container, mungkin kita ingin melihat apa yang terjadi didalam container kita, untuk melihat logs gunakan perintah ini
+docker container logs nama_container atau docker logs nama_container
+
+command ini akan menampilkan log dari container nginx kita,tergantung berapa sering kita mengunjungi nginx server kita, mari kita lihat beberapa simple commands untuk echange log experience
+
+page 37
+
+
+
 
 
 
