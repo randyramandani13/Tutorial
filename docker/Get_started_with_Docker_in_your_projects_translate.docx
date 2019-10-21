@@ -366,17 +366,131 @@ docker container logs nama_container atau docker logs nama_container
 command ini akan menampilkan log dari container nginx kita,tergantung berapa sering kita mengunjungi nginx server kita, mari kita lihat beberapa simple commands untuk echange log experience
 
 page 37
+command diatas juga bisa kita gunakan pada saat container stop, jadi kita bisa membaca log container yang mati untuk mengetahui jika container tiba tiba berhenti
 
+kita bisa melimit lines yang ditampilkan menggunakan command
+docker container logs --tail 10 container_name
 
+kita juga bisa melihat log secara live 
+docker container logs --follow container_name
 
+kita juga bisa mengkombinasi command seperti dibawah ini
+docker container logs --follow --tail 10 container_name
 
+stop container
+containers akan tetap tinggal di host machine walaupun keadaannya stop, jadi kita bisa merestart jika kita butuhkan lagi
 
+command untuk stop container
+docker container stop container_name
 
+page 38
+list stopped containers
+jika kita mencoba list container menggunakan docker container ls setelah stop container yang berjalan, maka tidak akan tampil, container kita tetap pada host machine, tapi tidak running, dan docker container ls hanya menampilkan container yang running saja
 
+kita bisa list semua container menggunakan command
+docker container ls -a
+docker ps -a
 
+start dan restart containers
+untuk menjalankan nginx container gunakan command
+docker container start container_name
 
+page 39
+terkadang kita membutuhkan merestart container, kita bisa stop dan start lagi, tapi docker juga menyediakan command untuk restart
 
+docker container restart container_name
 
+remove container
+kita bisa menghapus container kita karna beberapa alasat, yang terpenting adalah kita tidak bisa merubah configuration container kita
+
+page 40
+ini adalah aspect vital pada sebuah container, kita tidak bisa fine-tune mereka selagi mereka berjalan, kita menghancurkan mereka ketika mereka tidak dibutuhkan lagi dan memulai container baru dengan improved options, kita harus mendesain container kita sebagai stateless dan dapat menggantinya jika dibutuhkan
+
+untuk meremove container gunakan command ini
+docker container stop container_name
+docker rm container_name
+docker rm -f container_name jika container dalam keadaan running
+
+start a container with a custome name
+mari jalankan sebuah nginx container, karna kita telah remove container kita sebelumnya, kita perlu membuat yang baru, dan juga mari kita buat custom name kali ini, dengan menggunakan command
+docker container run --name randynginx -p 80:80 -d nginx 
+
+page 41
+custom name container akan memudahkan kita jika kita akan membuat script untuk automate workflow
+
+display live container resource usage
+kita bisa menampilkan resource yang digukanan pada container yang berjalan menggunakan command
+docker container stats randygnix
+
+comman ini akan menampilakn real time view pada resource usage, untuk test, buka browser kemudian visit nginx pages, kita akan melihat net traffice bertambah sesuai request pada user kita
+
+display the running process of a container
+terkadang kita ingin melihat apa saja yang running pada sebuah container, gunakan command ini
+docker container top randynginx
+
+page 42
+run a container in the foreground
+pada example sebelumnya, kita menjalankan container dengan -d option, pada saat development mungkin berguna jika kita menggunakan foreground dan melihat output apa yang terjadi pada terminal
+
+untuk menjalankan container foreground, jangan gunakan -d
+docker container run --name randynginx2 -p 80:80 nginx
+
+start building with containers
+pada chapter kali ini, kita akan melalui sejumlah tugas pengembangan khas dengan wadah Docker
+ Saya akan menunjukkan kepada Anda bagaimana Anda dapat mengatasi beberapa tantangan penting dengan alat inti
+ 
+ Mapping directories and files from the host machine to your container
+ Sebagai langkah pertama, saya pikir akan lebih baik untuk menampilkan halaman web khusus di server web Nginx kita karna halaman "Selamat datang di nginx!" adalah default
+ 
+Kami akan melakukan ini dengan membuat halaman HTML sederhana pada mesin host dan memasangnya ke dalam container
+
+Buat direktori di mesin Anda untuk contoh ini. Saya biasanya membuat direktori "Dev" di direktori root saya dan membuat direktori proyek saya di direktori "Dev". 
+
+buatlah index html sebagai contoh yang akan ditampilkan pada default nginx
+
+page 43
+Kami akan menampilkan halaman ini pada Nginx kami. Untuk mencapai ini, kami akan mount lokal
+direktori proyek pada mesin host ke dalam container
+
+Kami akan menggunakan opsi -v atau --volume dari run docker container untuk mount host
+direktori ke dalam container. Ini berarti bahwa isi direktori host akan direplikasi dalam container sehingga setiap perubahan yang dilakukan pada mesin host atau wadah akan tereplikasi
+
+Ketika Anda mount kode Anda ke sebuah container, perubahan code Anda akan terapply dalam container dengan cepat. Ini adalah bagaimana Anda dapat menggunakan container untuk devlopment aplikasi.
+
+kita menggunakan -v seperti -v host-directory:container-directory
+
+Kita harus menentukan direktori host terlebih dahulu. Silakan gunakan perintah pwd untuk check direktori kerja saat ini di Terminal
+
+Kami juga harus menentukan direktori dalam container tempat kami memetakan file dari host
+mesin. Kita harus memilih direktori yang digunakan container Nginx untuk menyajikan konten web.
+Kita dapat mengetahuinya dengan melihat dokumentasi gambar Nginx di Docker Hub.
+
+Jika kita membuka https://hub.docker.com/_/nginx/, dalam dokumentasinya kita dapat mengetahuinya
+direktori ini ada di / usr / share / nginx / html dalam container. (Anda dapat menemukan ini di sekitar contoh penggunaan paragraf di halaman web).
+
+page 44
+Saya lebih suka memetakan server Nginx kami ke port 8000 untuk dev, menggunakan command
+docker container run --name randynginx -v /randy:/usr/share/nginx/html -p 8000:80 -d nginx
+docker container run --name randynginx -v $(pwd):/usr/share/nginx/html -p 8000:80 -d nginx
+
+Jika Anda menggunakan Windows 10, lebih baik menggunakan pwd untuk menghindari masalah memiliki spasi atau karakter khusus dalam nama direktori. Silakan gunakan kurung kurawal di PowerShell, tepatnya
+form adalah -v $ {PWD}: / usr / share / nginx /.
+
+page 45
+Mounting volume ke dalam container adalah praktik yang umum. Bind mount direktori ke dalam container Anda akan membuat direktori dalam wadah jika belum ada sebelumnya. Jika direktori ada dalam wadah, bind mounting akan menimpa isinya dengan isi direktori pada mesin host Anda.
+
+Anda juga dapat bind mount files. Anda dapat, misalnya, menimpa file konfigurasi dalam container dengan cara ini. Ini bukan praktik terbaik, tetapi sekarang tujuannya adalah untuk memahami bagaimana cara mounting volume itu bekerja. Kami akan mempelajari cara yang benar nanti ketika kami membangun Docker Images.
+
+untuk build ini, kita menggunakan sedikit trick, kita menjalan commands didalam container
+
+execute commands inside running containers
+
+Docker memiliki fitur praktis lain yang akan sering Anda gunakan, ini adalah hal yang umum untuk mengetahui apa yang terjadi di dalam container, kita bisa contohnya cek file index.html yang ada didalam container
+
+Kita dapat melakukan ini dengan menjalankan perintah Linux dalam container yang sedang berjalan dengan docker container exec. Mari kita lakukan hal berikut:
+docker exec randynginx cat /usr/share/nginx/html/index.html
+
+page 46
 
 
 
