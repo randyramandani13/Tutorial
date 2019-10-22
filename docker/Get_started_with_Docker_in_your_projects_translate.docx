@@ -491,6 +491,28 @@ Kita dapat melakukan ini dengan menjalankan perintah Linux dalam container yang 
 docker exec randynginx cat /usr/share/nginx/html/index.html
 
 page 46
+Run an interactive shell in running containers
+kita bisa menjalankan docker container exec command untuk masuk ke interactive mode, yaitu kita menjaankan shell di dalam container yang sedang berjalan
+
+Linux shell adalah program perintah dari Anda dan meneruskannya ke sistem operasi untuk dieksekusi. Dalam contoh kita, kita akan meluncurkan bash yang merupakan program shell yang digunakan
+pada banyak mesin Linux, dan kami akan menggunakannya untuk melihat-lihat di dalam container
+
+docker container exec -ti randynginx /bin/bash
+
+kita akan mendapatkan prompt seperti diatas, dimulai dari root@hostname/container id, sekarang kita sedang berada di dalam container
+
+penjelasan command yang kita gunakan adalah
+- kita menggunakan docker container exec command dengan menambahkan -ti, ini menjalankan interactive mode(-i), dimana kita menginput dari terminal dan mendapat output dari terminal (-t)
+
+page 47
+melihat linux distribution yang kita gunakan di dalam container
+cat /etc/+-release
+
+outpun mengatakan kita menggunakan debian, kita coba jalankan debian specifict seperti apt, kita gunakan untuk melihat linux package yang terinstall dalam container kita
+apt-list
+
+page 48
+
 
 
 
