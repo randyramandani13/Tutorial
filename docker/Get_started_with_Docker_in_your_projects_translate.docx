@@ -513,6 +513,58 @@ apt-list
 
 page 48
 
+page 49
 
+mount a configuration file
+sebelumnya saya menjanjikan kita akan map configuration file ke dalam nginx container kita
+
+mari kita buat sebuah directory di dalam project directory kita untuk website kita dan satu lagi untuk configuration files. saya membuatnya html dan config
+
+page 50
+mari kita buat nginx configuration file, kita perlu sebuah nginx configuration file,jadi kami akan menyalin file konfigurasi default dari container yang sedang berjalan dengan perintah docker container cp. config file berada di /etc/nginx/nginx.conf di dalam container
+
+
+docker container cp command mengcopy file dari dalam container yang berjalan kedalam host machine dan sebalikna, containernya harus dalam keadaan hidup, kemudian jalankan command
+docker container cp randynginx:/etc/nginx/nginx.conf ./config/
+
+umumnya kita membuat default setting dan configuration file pada machine kita, dan start new container menggunakan configuration file pada host.
+docker container cp randynginx:/etc/nginx/nginx.conf ./config/
+
+page 51
+
+page 52
+sekarang kita jalankan docker container run --name randynginx2 -v $(pwd)/html:/usr/share/nginx/html -v $(pwd)/config/nginx.conf:/etc/nginx/nginx.conf -p 8001:80 -d nginx
+
+dalam command diatas kita mengclone index html dari directory html dan config yang ada di host kedalam container
+
+perlu di ingat, jika ifle sudah ada di dalam container, bind mounting akan override file yang ada di dalam container menggunakan file yang di mount dari host machine
+
+page 53
+
+page 54
+build images
+
+Identifying the right Docker images for your project
+kita sudah menggunakan container sebagai langkah pertama. kita telah belajar cara menarik dan menjalankan container application pada mesin Anda dengan Docker. kita membuat server web Nginx dan melayani simpe web yang sederhana
+
+kita juga belajar cara memodifikasi kode pada mesin Anda dan melihat perubahan pada halaman web
+dilayani oleh wadah Nginx Anda. Kami juga memodifikasi file konfigurasi dalam container Nginx. Kami menggunakan bind mount volume untuk memetakan file kode dan file konfigurasi ke dalam Nginx container
+
+hal yang paling penting adalah, kita sudah belajar menggunakan docker container based on linux OS, setiap container di isolasi oleh linux environtment dengan settings file system, libraries, system dan user programs yang terisolasi (untuk melengkapi, kita akan belajar windows based container tapi pada chapter lain )
+
+Kita telah melihat di bab sebelumnya bahwa kita dapat memulai container Docker dari Docker
+images, Docker images berisi semua file (file konfigurasi, file yang dapat dieksekusi, program, pustaka, dan pengaturan) yang diperlukan untuk menjalankan aplikasi tertentu dalam sebuah container. Docker images berisi semua hal di atas dalam bentuk file dalam struktur file Linux.
+
+Ketika Anda bekerja dengan Docker di proyek Anda, itu adalah keterampilan penting untuk mengidentifikasi Docker images yang tepat di Docker Hub untuk proyek Anda. Mari bereksperimen dengan beberapa images untuk membiasakan diri dengan Hub Docker
+
+page 55
+
+create your docker id
+docker images disimpan dalam docker registries, docker hub adalah sebuah public registry, jadi ada banyak image yang tersedia secara gratis di dalamnya
+
+page 56
+find and choose images on docker hub
+
+page 57
 
 
