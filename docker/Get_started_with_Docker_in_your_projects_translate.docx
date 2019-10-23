@@ -706,7 +706,40 @@ your first dockerfile
 
 mari kita buat custom docker images dari existing images yang sudah ada, dalam hal ini kita akan menggunakan alpine images
 
+page 71
 
+page 72
+
+page 73
+
+1. define the base images with from
+setiap dockerfile harus dimulai dari command FROM, ini untuk menunjuk master images yang digunakan
+2. add the lines to install package
+
+page 74
+RUN command mengexecutes linux command, contohnya kita menjalankan update apk package untuk menginstal curl menggunakan apk package manager
+
+3. build your images
+
+docker image build randyramandani13/alpine-curl:1.0
+
+- docker image build : command yang digunakan untuk membangun sebuah docker images
+- -t : digunakan untuk mendefinisikan nama dan juga tags
+- . : menandakan path dockerfile kita
+
+page 74
+
+page 75
+
+page 76
+
+page 77
+
+page 78
+
+page 79
+
+page 80
 
 
 
