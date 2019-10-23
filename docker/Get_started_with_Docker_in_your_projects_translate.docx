@@ -568,6 +568,103 @@ find and choose images on docker hub
 page 57
 
 page 58
+Tags
+versi yang tersedia pada images ditandai oleh tag, contohnya python, kita bisa melihat banyak tag yang artinya
+
+imagesnya adalah python, kita bisa menggunakan nama ini di dalam command, 
+tags mengindikasikan versi pada images, kita bisa memilih versi spesifik menggunakan : setelah nama images, contohnya python:3.6.4-jessie
+
+page 59
+pada contoh python, kita akan melihat tag number seperti 3.7 3.6.4 3.5 2.7.14, nomor itu mengindikasikan python version yang ada di dalam imagesnya
+
+informasi lainnya mengindikasikan versi linux yang di gunakan seperti stretch, jessie, wheezy, dan alpine, stretch adalah debian 9, jessie debian 8 wheezey debian 7 kemudian ada juga alpine linux, alpine linux is a security oriented, lighweigh based on misl libc dan busybox
+
+kebanyakan dari official images docker based dari alpine linux, karna ukurannya yang sangat ringan hanya sekitar 4mb sedangkan debian memakan 100mb
+
+nanti kita akan melihat kenapa kita harus membuat images sekecil mungkin, untuk portability dan deployability
+
+page 60
+setiap docker repository memiliki latest tag, itu secara otomatis terdownload jika kita tidak menyertakaan tags pada saat docker pull,
+
+quieck reference
+Bagian referensi cepat halaman berisi info dan tautan bermanfaat untuk teknologi yang diberikan. Saya biasanya menggunakan tanda "Di mana mendapatkan bantuan" dan "Di mana akan mengajukan masalah" untuk memeriksa dokumentasi dan menelusuri atau membuat masalah bila perlu
+
+Kedua bagian ini sebagian besar mencantumkan tautan pada StackOverflow dan GitHub, sehingga tidak ada keajaiban besar sini. Anda dapat beralih ke sumber-sumber ini dan Google kapan saja Anda membutuhkan bantuan.
+
+Setiap repositori memiliki beberapa paragraf yang menjelaskan tentang teknologi yang diberikan. Ini adalah berguna ketika Anda sedang dalam proses memilih solusi untuk masalah niche yang unik
+
+Bagian yang disebut "how to use this images" adalah bagian yang paling saya gunakan. Pemelihara biasanya berikan contoh dan pedoman tentang cara menggunakan gambar yang berbeda. Dalam kasus Python, Anda melihat Contoh Dockerfile; ini akan memainkan peran yang sangat penting nanti dalam buku ini
+
+contohnya pada pythone terdapat command docker run -it --rm --name my-running-script -v "$PWD":/usr/srv/myapp -w /usr/srv/myapp python:3 python your-daemon-or-script.py
+command ini berisi python script menggunakan python 3. 
+
+page 61
+
+page 62
+
+ketika kita sudah memilih images mana yang akan kita gunakan, kita pull images sesuai dengan tag nya, contohnya 
+
+docker pull python:3.6.4
+
+page 63
+Start the container with the right configuration
+
+mari kita buat directory example2
+dan buatlah file app.py tyang berisi
+print("Hello world")
+
+kita jalankan command 
+docker run -it --rm --randypy -v "$PWD":/usr/src/myapp -w /usr/src/myapp python:3 python your-daemon-or-script.py
+
+yang artinya
+
+--rm : berarti Docker akan secara otomatis menghapus container setelah eksekusi skrip selesai. Dengan cara ini Anda tidak akan memiliki container yang tidak digunakan masih ada di mesin Anda
+
+-w : set working directory didalam container, seperti kita lihat, kita mapping current directory ke dalam /usr/src/myapp ke dalam container menggunakan -v, kemudian kita memastikan working directorynya sama agar script bisa di eksekusi
+
+- "$PWD" berarti bind mount current directory kedalam container
+
+- python:3 kita ganti menggunakan versi yang kita gunakan
+
+- python app.py menjalankan script app.py
+
+page 64
+docker run -ti --rm --name randypy -v "$PWD":/usr/src/myapp/ -w /usr/src/myapp python:3.6.4 python app.py
+
+kita bisa juga merubah appy menjadi seperti dibawah agar lebih interaktif
+name = input("Enter your name: ")
+print("Hello ", name)
+
+page 65
+
+page 66
+
+page 67
+build images for your projects
+
+sekarang saat nya kita belejara cucial conect dari docker, 
+
+Anda sekarang telah menarik beberapa images dari Docker Hub dan mulai menggunakan images itu
+
+kita telah mempelajari bahwa kontainer adalah lingkungan run-time yang terisolasi, mandiri dan portabel, sebagian besar menggunakan sistem operasi Linux
+
+Kami juga telah belajar cara memilih images di Docker Hub dan cara menggunakannya mereka untuk menjalankan kode program kita atau bagaimana Anda dapat menggunakannya untuk memulai server web, 
+
+Anda juga telah melihat perintah dasar yang dapat Anda gunakan untuk memulai, menghentikan atau menghapus container, mengikuti log atau memeriksa resources. Kami juga telah melihat cara list dan remove images.
+
+Semua latihan yang kami lalui sejauh ini dalam buku ini dibangun di sekitar docker images. docker imagesberisi semua file, pengaturan, dan konfigurasi yang diperlukan untuk menjalankan aplikasi tertentu.
+
+Pertanyaan yang sangat logis pada tahap ini adalah untuk mencari tahu dari mana images berasal.
+
+docker images berisi file yang disebut Dockerfile. Dockerfile mendefinisikan step yang akan di eksekusi untuk membuat sebuah docker images, docker images dijalankan menggunakan docker images build commad dari sebuah dockerfile
+
+page 68
+
+
+
+
+
+
 
 
 
