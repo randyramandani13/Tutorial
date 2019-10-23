@@ -659,9 +659,52 @@ Pertanyaan yang sangat logis pada tahap ini adalah untuk mencari tahu dari mana 
 docker images berisi file yang disebut Dockerfile. Dockerfile mendefinisikan step yang akan di eksekusi untuk membuat sebuah docker images, docker images dijalankan menggunakan docker images build commad dari sebuah dockerfile
 
 page 68
+itu berarti maintainers docker repositories mendefine images mereka dalam docker file, 
 
+dockerfile adlah step by step yang di definisikan untuk membangun sebuah images, dockerfile berisi list instruksi yang akan di eksekusi ketika kita menjalankan docker images build command, workflownya seperti ini
 
+1. kita membuat dockerfile dan mendefinisikan step untuk membangun sebuah images
+2. kita menjalankan docker image build command
+3. setelah menjadi images, kita bisa menjalankannya menggunakan command docker run
 
+Anda biasanya mulai mencari image Docker yang tersedia di Docker Hub. Anda juga akan menemukannya
+image di GitHub disertakan dengan sejumlah repo yang baik (dalam bentuk Dockerfile), atau Anda
+dapat berbagi image Docker dengan tim atau perusahaan Anda dengan membuat Docker Registry Anda (kami akan lakukan ini nanti).
+
+kemudian bagaimana jika kita tidak bisa menemukan docker images yang pas untuk project kita? disinilah kita perlu membuat docker image kita sendiri
+
+ketika kita bekerja pada sebuah project real, biasanya kita perlu membuat sebuah docker images yang pas untuk project kita
+
+page 69
+dockerfile basic
+
+mari kita lihat contoh sebuah dockerfile, 
+FROM python:3.6.4-alpine3.7
+ARG app_name
+RUN apk add --update --no-cache nodejs postgresql-dev gcc
+python3-dev musl-dev libffi-dev
+WORKDIR /root/
+COPY $app_name $app_name
+WORKDIR /root/$app_name
+RUN pip install -r requirements/dev.txt
+RUN npm install
+ENV FLASK_APP=autoapp.py
+ENV FLASK_DEBUG=1
+CMD npm start
+
+pada titik ini, penting untuk mengerti beberapa poin dari contoh file diatas
+1. dockerfile adalah sebuah teks yang berisi instructions
+2. docker menyediakan beberapa standart instruction seperti from,add,copy,run,env,expose,cmd
+3. docker akan membuat images secara otomatis ketika kita selesai menjalankan docker image build command
+
+jadi kita perlu mendeskipsikan step untuk environtment kita dalam dockerfile, kemudian kita membuat images dari dockerfile dan menjalankan containernya
+
+page 70
+jadi, mengerti dockerfile instruction saja tidak cukup untuk membuat dockerfile, karna kita harus tau konteks teknologi yang akan kita bangung,
+
+your first dockerfile
+
+mari kita buat custom docker images dari existing images yang sudah ada, dalam hal ini kita akan menggunakan alpine images
 
 
 
