@@ -741,6 +741,142 @@ page 79
 
 page 80
 
+page 81
 
+page 82
 
+page 83
+dockerfile key instruction
 
+kita akan mempelajari instruction dibawah ini
+- FROM : setiap dockerfile diawal oleh FROM.
+- COPY and Add : digunakan untuk mengcopy files kedalam images dari host
+- ENV - digunakan untuk set environtment variables
+- RUN - menjalankan operating system commands
+- VOLUME - mendefinisian volume untuk menyimpan file di luar container fily system
+- USER - specific user selain user root
+- WORKDIR - set working directory
+- EXPOSE - exposes ports
+- CMD and antrypoint
+
+FROM
+seperti yang kita tahu, setiap dockerfile diawali oleh FROM instruction, ini akan menentukan parent images untuk dockerfile, artinya subsequent instruction akan dijalankan di dalam parent images
+
+note :
+ada instruction yang bisa kita gunakan sebelum FROM pada docker file, yaitu ARG, ARG digunakan untuk specify arguments untuk docker images build command menggunakan --build-arg varname=value flag, dengan cara ini kita bisa melewati parent images version sebagai argument untuk docker build, 
+
+page 84
+kita bisa menggukanan lebih dari satu FROM instructions dalam dockerfile, kita akan menggunakannya nanti, sebagai contoh, saat kita mengunakan satu images untuk bild app kita dan images lain untuk menjalankannya
+
+COPY vs ADD
+add dan copy di desain untuk menambahkan directory dan file kedalam docker images, namun kebanyakan menggunakan copy
+
+ADD instruction akan menambahkan ke dalam docker pertama dan copy menambahkannya nanti untuk memudahkan, solusi sempurna untuk menyalin file dan direktori ke sistem file image Anda karena ADD dalam beberapa kasus tidak dapat diprediksi.
+
+ADD bisa mengambil files dari URL, sedangkan COPY tidak bisa, add bisa extract compressed file, sedangkan copy tidak, fitur extract dari ADD tergantung dengan format yang bisa di extract, dan ini yang membuat ADD menjadi unpredictable jadi banyak user mengguakan copy
+
+jika kita mengambil file dari web ke dalam images, lebih baik menggunakan RUN dan curl kemudian uncompress file menggunakan RUN dan compression command
+
+ENV
+digunakan untuk mendefinisikan environtment variables, dua hal yang bagus tentang env adalah:
+1. kita bisa menggunakannya untuk mendefinisikan environtment variable yang nantinya diperlukan di dalam container, jadi ketika kita membangun sebuah image kemudian menjalankan container, kita akan menemukan environtment variable yang tersedia dan itu sudah kita spesifikasikan kedalam dockerfile
+2. Anda bisa menggunakan variabel yang Anda tentukan oleh ENV di Dockerfile itu sendiri. Jadi dalam instruksi selanjutnya, variabel environtment akan tersedia
+
+page 85
+RUN
+run akan execut command, 
+- kita bisa menggunakan apt-get command untuk menambahkan package kedalam images, sebaikanya kita meletakan apt-get update dan apt-get install dalam line yang sama untuk layer caching, 
+
+VOLUME
+Anda dapat menggunakan instruksi VOLUME di Dockerfile untuk memberi tahu Docker bahwa direktori dan file yang Anda simpan di direktori tertentu harus disimpan di sistem file host, bukan di sistem file kontainer. Ini menyiratkan bahwa informasi yang disimpan dalam volume akan bertahan dan menjadi
+tersedia juga setelah Anda menghancurkan container
+
+Dengan kata lain, ini adalah praktik terbaik untuk membuat volume untuk file data Anda, file database, atau apa pun file atau direktori yang akan diubah oleh pengguna Anda ketika mereka menggunakan aplikasi Anda.
+
+Data yang disimpan dalam volume akan tetap di mesin host bahkan jika Anda menghentikan container
+dan lepaskan container emggunakan docker container rm
+
+USER
+Jangan menjalankan program Anda sebagai root di container Anda, gunakan instruksi USER untuk menentukan pengguna di Dockerfile. Pengguna ini juga akan digunakan untuk menjalankan RUN, CMD AND
+Instruksi ENDPOINT di Dockerfile Anda.
+
+page 86
+WORKDIR
+Cara mudah untuk mendefinisikan direktori kerja, ini akan digunakan dengan RUN, CMD,
+ENTRYPOINT, COPY dan ADD petunjuk di Dockerfile. Anda dapat menentukan WORKDIR beberapa kali di Dockerfile
+
+EXPOSE
+Instruksi penting untuk memberi tahu pengguna Anda tentang port yang didengarkan aplikasi Anda.
+EXPOSE tidak akan mempublikasikan port, Anda harus menggunakan docker container run -p ... untuk melakukannya bahwa ketika Anda memulai container.
+
+CMD and ENTRYPOINT
+
+page 87
+Dockerfile best practices
+clean up steps in the dockerfile
+
+beberapa steps seperti instal linux package mungkin akan menambahkan temporary file didalam docker images, best practice nya untuk mendelete temporary files di instruction yang sama di dalam dockerfile jadi tidak menambah besar images
+
+contohnya dibawah ini
+FROM alpine:3.4
+RUN apk update && apk add \
+curl \
+vim \
+git \
+&& rm -rf /var/cache/apk/*
+
+page 88
+sor multi-line instructions
+Merupakan ide bagus untuk menyortir instruksi multiline dengan cara yang bisa dibaca manusia. Contoh saya di atas tidak optimal, karena saya menginstal paket secara acak. Saya harus menulis file seperti ini sebagai gantinya, tempat saya memesan paket dalam urutan abjad. Ini sangat berguna saat Anda bekerja dengannya daftar panjang
+
+start your docker file with the steps that are least likely to change
+Images Anda akan stabil setelah beberapa saat, dan perubahan cenderung kecil. Praktik terbaik adalah
+struktur Dockerfile Anda sesuai dengan yang berikut ini
+
+1. install tolls yang diperlukan untuk membangun aplikasi
+2. install dependencies, libraries dan package
+3. build application
+
+page 89
+use a .dockeignorefile
+Direktori tempat Anda mengeluarkan perintah build docker disebut build context.
+Docker akan menggunakan semua file dan direktori di direktori build Anda sebagai bagian dari konteks build. Jika Anda memiliki file di direktori Anda yang tidak diperlukan oleh build Anda, Anda akan memiliki konteks build yang lebih besar yang menghasilkan build yang lebih besar.
+
+Anda dapat memperbaiki situasi ini dengan menambahkan file .dockerignore yang berfungsi sama
+ke .gitignore. Anda dapat menentukan daftar folder dan file yang harus diabaikan di
+membangun konteks.
+
+container should be ephemeral
+Merupakan minat terbaik Anda untuk merancang dan membuat images Docker yang dapat dihancurkan dan diciptakan kembali / diganti secara otomatis.
+
+Yang berarti Anda harus membuat Dockerfiles yang mendefinisikan gambar stateless. Keadaan apa pun
+harus disimpan di luar container Anda
+
+one container should have one concern
+Pikirkan container sebagai entitas yang bertanggung jawab atas satu aspek proyek Anda. Desain
+aplikasi Anda sedemikian rupa sehingga server web Anda, database, cache di-memori dan komponen lainnya memiliki images khusus mereka.
+
+Anda akan melihat manfaat dari desain seperti itu saat menskala aplikasi Anda secara horizontal. Kami akan melihat interoperabilitas container dan container networking di bab-bab selanjutnya.
+
+page 90
+Image building workflow
+sekarang kita akan melihat toolset dan best practices, kita mungkin bertanya2 apa cara terbaik untuk membuat dockerfile
+
+- pilih base images yang sesuai : 
+- gunakan shell untuk build environtment :
+Saya mencoba-coba-gagal pendekatan. Saya menarik image yang saya pilih ke komputer saya dan memulai wadah dalam mode interaktif dengan shell seperti kita menggunakan docker container run --rm -ti
+takacsmark/alpine-smarter:1.0 /bin/sh
+
+Saya mulai secara manual menjalankan langkah-langkah dalam container yang akan saya tempatkan di Dockerfile, dan melihat bagaimana hasilnya. Setelah langkah tampaknya OK, saya menambahkannya ke Dockerfile saya
+
+Jika terjadi kesalahan, saya mengubah arah, dan saya segera memperbarui Dockerfile
+
+- tambahkan steps untuk dockerfile dan build images
+Saya terus menambahkan langkah terus menerus saat saya membuat kemajuan dengan pengaturan saya di container.
+
+Sesekali saya berhenti dan membangun images saya dari Dockerfile untuk memastikannya
+menghasilkan hasil yang sama setiap saat
+
+- ulangi langkah 2 dan 3
+
+page 91
