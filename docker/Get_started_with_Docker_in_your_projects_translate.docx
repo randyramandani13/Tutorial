@@ -880,3 +880,108 @@ menghasilkan hasil yang sama setiap saat
 - ulangi langkah 2 dan 3
 
 page 91
+Run a shell script in a container
+mari buat directory example 4, dan buat 2 file myscript.sh dan Dockerfile, myscript.sh akan berisi linux shell script
+
+vi myscript.sh
+#!/bin/sh
+echo 'Hello, World from my Docker Container!'
+
+vi dockerfile
+FROM alpine:3.7
+COPY ./myscript.sh /root/
+RUN chmod 764 /root/myscript.sh
+CMD /root/myscript.sh
+
+kita menggunakan aplina 3.7 base images
+
+pada line 3. COPY ./myscript.sh /root/ kita copy script file linux kita dari host kedalam home directory root user didalam alpine linux
+
+RUN chmod 764 /root/myscript.sh berarti kita menjalankan chmod linux command untuk mengubah permission dari script kita agar bisa di eksekusi
+
+line terakhir CMD /root/myscript.sh berarti shell script kita adalah main command di docker images, dan akan di executed ketika container startup
+
+page 92
+docker image build --tag randyramandani13/example4:1.0 .
+
+docker run --rm randyramandani13/example4:1.0
+
+add a User
+Anda seharusnya tidak menjalankan program Anda sebagai pengguna root. Karenanya kita akan belajar cara membuat pengguna di image Anda dan membuatnya aktif. Kami akan tetap menggunakan contoh skrip shell kami. Mari kita modifikasi Dockerfile dalam example4
+
+Mari menambahkan pengguna bernama example4 ke Dockerfile kami dan menjadikannya sebagai pengguna image kami.
+Harap tambahkan baris berikut ke Dockerfile Anda, dan saya akan menjelaskan apa yang terjadi:
+
+FROM alpine:3.7
+RUN adduser -D example4
+COPY ./myscript.sh /home/example4/bin/
+RUN chmod 764 /home/example4/bin/myscript.sh
+RUN chown -R example4:example4 /home/example4/bin
+USER example4
+CMD /home/example4/bin/myscript.sh
+
+page 93
+
+From instuction sama seperti sebelumnya
+
+kita menambahkan line RUN adduser -D example4 untuk menjalankan linux command adduser. ini akan menambahkan user dengan username example 4,perlu diingan, linux akan menambahkan sebuah group dengan nama yang sama, dan membuat example4 user yang hanya menjadi membernya, dengan cara ini kita bisa manage user dan group level file permission untuk user. -D berarti kita tidak setting password untuk user itu
+
+Perhatikan bahwa kami menambahkan pengguna di awal Dockerfile karena kami mengharapkannya tidak sering berubah
+
+kita merubah COPY instruction untuk mengcopy script file kita kedalam /home/example4/bin. dimana /home/example4 adalah home directory untuk user example4 yang baru saja kita buat, kita menentukan file itu seharusnya di copy ke dalam bin subdirectory pada example4 user home directory, 
+
+kita mengubah file permission dengan cara yang sama seperti sebelumnya
+
+line selanjutnya sedikit berbeda RUN chown -R example4:example4 /home/example4/bin menjalankan chown command, yang artinya mengubah ownership dari /home/example4/bin directory untuk user dan group example4, kita perlu menjalankan itu karna COPY defaultnya mengcopy file kita kedalam images dengan owner user dan group root, inti tidak mudah untuk kita, karna kita menjalankan container menggunakan user example 4 dan kita perlu set permission untuk filenya dengan tepat
+
+Pada baris di mana kita menjalankan perintah chown di Dockerfile, kita masih bertindak sebagai pengguna root, yang praktis, karena kita membutuhkan akses pengguna super untuk menjalankan chown
+
+Instruksi COPY tidak menghormati instruksi USER di Dockerfile, jadi gunakan USER sebelum COPY di Dockerfile tidak akan memiliki efek yang diharapkan pada COPY
+
+.
+Pada baris berikutnya setelah chown, kami menetapkan pengguna dengan USER example4. Ini berarti setiap
+Instruksi RUN dan instruksi CMD akan dijalankan sebagai user example4. COPY dan ADD akan mengabaikan USER, ada fitur yang berguna untuk membuatnya sedikit terlihat lebih baik, dan saya akan menunjukkannya kepada Anda di
+langkah selanjutnya
+
+page 94
+docker image build --tag randyramandani13/example4:1.0
+
+docker run --rm randyramandani13/example4:1.0
+
+COPY with chown
+Di bagian sebelumnya, kita telah melihat bahwa kita perlu menggunakan chown untuk mengubah kepemilikan
+dari skrip yang kami salin ke dalam image. Saya ingin menunjukkan masalah dasar sebelum saya memberi Anda solusi yang lebih elegan untuk itu
+
+Baru-baru ini Docker menambahkan fungsionalitas chown ke instruksi COPY di Dockerfile. Ayo
+ubah Dockerfile Anda seperti ini:
+
+page 95
+FROM alpine:3.7
+RUN adduser -D example4
+USER example4
+COPY --chown=example4:example4 ./myscript.sh /home/example4/bin/
+RUN chmod 764 /home/example4/bin/myscript.sh
+CMD /home/example4/bin/myscript.sh
+
+seperti yang kita lihat, saya telah merubah USER example4 ke awal dari dockerfile, karna kita tidak butuh superuser access untuk menjalankan RUN chown, karna kita menggunakan format baru dari COPY --chown akan menjalankan chown untuk kita
+
+line COPY --chown=example4:example4 ./myscript.sh /home/example4/bin/ memiliki segala yang kami butuhkan untuk menyalin file ke dalam gambar dan menjadikan pengguna example4 kami pemilik file pada saat bersamaan.
+
+set the working directory
+Anda mungkin memperhatikan bahwa kami harus mengetikkan path /home/example4/bin beberapa
+kali di Dockerfile kami. Jika kami mengubah jalur ini, kami harus mengubah beberapa baris di
+Dockerfile. Ini membutuhkan waktu dan usaha dan rawan kesalahan
+
+Itu selalu merupakan ide yang baik untuk menghilangkan kode redundan, jadi kami akan menggunakan WORKDIR untuk menentukan kode kami direktori kerja dan arahkan ke home/example4/bin. Setelah kami menentukan WORKDIR, kami bisa
+menyebutnya sebagai direktori saat ini dengan ./
+
+dockerfile akan terlihat sebagai berikut
+FROM alpine:3.7
+RUN adduser -D example4
+USER example4
+WORKDIR /home/example4/bin
+COPY --chown=example4:example4 ./myscript.sh ./
+RUN chmod 764 ./myscript.sh
+CMD ./myscript.sh
+
+page 96
