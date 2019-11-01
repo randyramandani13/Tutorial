@@ -985,3 +985,13 @@ RUN chmod 764 ./myscript.sh
 CMD ./myscript.sh
 
 page 96
+
+
+page 155
+Build multi-container applications
+
+kebanyakan aplikasi terdiri dari beberapa komponen yang berbeda yang saling bekerja sama untuk menyediakan sebuah aplikasi, di kebanyakan project, kita akan mempunyai lebih dari satu docker images untuk komponen yang berbeda seperti database, backend server dan front end server
+
+pada saat kita membangun sebuah project, biasanya kita menggambarkan architeture dan define bagaimana komponennya bekerja dan terkoneksi
+
+dalam chapter ini, kita akan belajar bagaimana menggunakan docker tools untuk membuat aplikasi yang complex yang terdiri dari beberapa container dan kita akan mendefinisikan interoperability dari kontainer berikut.
