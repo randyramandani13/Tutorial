@@ -995,3 +995,25 @@ kebanyakan aplikasi terdiri dari beberapa komponen yang berbeda yang saling beke
 pada saat kita membangun sebuah project, biasanya kita menggambarkan architeture dan define bagaimana komponennya bekerja dan terkoneksi
 
 dalam chapter ini, kita akan belajar bagaimana menggunakan docker tools untuk membuat aplikasi yang complex yang terdiri dari beberapa container dan kita akan mendefinisikan interoperability dari kontainer berikut.
+
+
+page 158
+mari kita review docker compose yml nya
+version 3 adalah versi docker compose yang kita gunakan, versi major saat ini adalah verai 3, dengan latest version 3.6
+
+servicea, service berisi services configuarion untuk setiap container kita, setiap service menjalankan satu image untuk menjalankan container, saat ini kita menggunakan official images saat jnj, tapi kita bisa juga menggunakan custom images
+
+docker compose memjliki option yang bisa kita define lada dockerfile, jadinkita yidak perlu mendefine seperti envjrontment variable atau vmd disinj
+contohnua, kjta menambahkan envjrontment variable yang dinperlukan untuk wordpress agar bisa jalan,
+
+setelah kita menjalankan docker compose up, 
+ada yf menarik disini
+docker compose membuat 2 container dan membjat network example10default untuk aplikask kita
+
+container kuta menggjnakan network ini untuk konek ke lainnya, servixe kita bisa mengakses satu sama lain didalam neywork ini menggunakan service name sebagai hostname
+
+dalam default network, example10default,mariadb container tersedia dengan hostname mysql karna service name yang digunakan adalah itu.
+
+wordpress container nisaengakses mariadb menggunakan hostname mysql. dalam wpconfig file value dbhost di srt mysql by default jadi wordprwss akan melihat hostname mysql
+
+saya sengaja menamkan mariadb service dengan mysql karna saya tahu wordprwss databse hostname by default di setting mysql, jika saya menggunakan service name yang berbeda pada docker compose, saya harus merunah dbhost setting atau wordprwss tidak akan connect
